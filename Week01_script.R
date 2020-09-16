@@ -26,11 +26,11 @@ Jenny <- 40
 paste("Jenny:", Jenny)
 
 # (e)
-paste("Harry and Jenny greater than Ron and Hermoine",(Harry + Jenny) > (Ron + Hermoine))
+paste("Harry and Jenny greater than Ron and Hermoine:", (Harry + Jenny) > (Ron + Hermoine))
 
 # (f)
 Snape <- 49
-paste("Snape", Snape)
+paste("Snape:", Snape)
 
 # (g)
 Voldemort <- 1 / Harry # Is this what he means by inverse?
@@ -80,7 +80,7 @@ paste(c("wizards:", wizards), collapse=" ")
 
 # (d)
 names(wizards) <- c("Harry", "Hermoine", "Jenny", "Ron")
-wizards
+print("wizards:"); wizards
 
 # (e)
 remove(Snape)
@@ -100,7 +100,7 @@ wizards[c("Hermoine", "Ron")]
 wizards[2:4]
 
 # (j)
-wizards < 45
+print("Scores lower than 45:"); wizards < 45
 
 
 # 4. Matrices
@@ -119,14 +119,14 @@ colnames(wiz_scores) <- c("test1", "test2", "test3")
 print("wiz_scores:"); wiz_scores
 
 # (d) its not colMeans right?
-wiz_scores2 <- cbind(wiz_scores, "avg" = rowMeans(wiz_scores))
+wiz_scores2 <- cbind(wiz_scores, avg=rowMeans(wiz_scores))
 print("wiz_scores2:"); wiz_scores2
 
 # (e) its not colMeans right?
 otherwiz <- matrix(c(81, 80, 78, 92, 87, 84), byrow = TRUE, nrow = 2)
 rownames(otherwiz) <- c("Neville", "Jenny")
 colnames(otherwiz) <- c("test1", "test2", "test3")
-otherwiz <- cbind(otherwiz, "avg" = rowMeans(otherwiz))
+otherwiz <- cbind(otherwiz, avg=rowMeans(otherwiz))
 print("otherwiz"); otherwiz
 
 # (f)
@@ -138,7 +138,7 @@ paste(c("Hermoines 2nd and 3rd scores:", all_wiz_scores["Hermoine", 2:3]), colla
 
 # (h) do you mean 'all_wiz_scores2'?
 wiz_scores2 <- all_wiz_scores[,c(1,3)]
-wiz_scores2 <- cbind(wiz_scores2, "newavg" = rowMeans(wiz_scores2))
+wiz_scores2 <- cbind(wiz_scores2, newavg=rowMeans(wiz_scores2))
 print("wiz_scores2:"); wiz_scores2
 
 # (i)
@@ -226,8 +226,7 @@ print("lowest income respondent:"); data1[order(income)[1],]
 print("Ajax to Fred:"); data1[which(data1$respondent == "Fred"):which(data1$respondent == "Ajax"),]
 
 # (i)
-log_income <- log(data1$income)
-data1 <- cbind(data1, log_income)
+data1 <- cbind(data1, log_income=log(data1$income))
 print("data1 w/log_income"); data1
 
 
