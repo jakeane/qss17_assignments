@@ -2,10 +2,9 @@
 ## Intro to R, Part 1 & 2
 ##
 ## Name: John Keane
-## Date: 9/15/20
+## Date: 9/16/20
 
 # Objects, Vectors, and Matrices
-
 
 # 1. Objects
 
@@ -192,7 +191,7 @@ print("fact_ideo:"); fact_ideo
 
 # (i)
 respondent <- c("Susie", "Abdul", "Maria", "Fred", "Wilma",
-                "Barney"," Dino", "Ajax", "Thor", "Betty")
+                "Barney", "Dino", "Ajax", "Thor", "Betty")
 paste(c("respondent:", respondent), collapse=" ")
 
 
