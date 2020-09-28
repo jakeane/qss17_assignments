@@ -9,7 +9,6 @@
 
 # (a)
 library(tidyverse)
-library(stringr)
 
 # (b)
 data("swiss")
@@ -74,10 +73,10 @@ movie <- movie %>%
 print("head(movie) length")
 movie$length[1:6]
 
-# (e) the spectre feels janky
-movie %>%
-    filter(movie_title > "Skyfall", movie_title <= "Spectre  ")
-
+# (e)
+first_spectre <- min(which(str_detect(movie$movie_title, "Spectre")))
+last_skyfall <- max(which(str_detect(movie$movie_title, "Skyfall")))
+movie[first_spectre:last_skyfall,]
 
 # 4. Plots & ggplot2
 
@@ -131,7 +130,7 @@ ggplot(approval, aes(x = year, y = approve)) +
 # I'd argue that the issue is different as its not due to multiple sources
 # Instead it is due to data being tracked quarterly
 
-# (f) is this the right variable
+# (f)
 ggplot(approval, aes(x = tt, y = approve)) +
     geom_line() +
     labs(
@@ -234,12 +233,13 @@ undat %>%
 
 # 6. Plots
 
-# (a) one panel, but faceted?
+# (a)
 undat %>%
     group_by(region_un, year) %>%
     summarize(meanGini = mean(gini_reported, na.rm = TRUE)) %>%
-    ggplot(aes(x = year, y = meanGini, color = region_un)) +
+    ggplot(aes(x = year, y = meanGini)) +
     geom_point() +
+    facet_grid(~region_un) +
     labs(
         title = "6a. Gini Coefficient of Countries by Year and Region",
         x = "Year",
@@ -247,7 +247,7 @@ undat %>%
         color = "Region"
     )
 
-# (b) plot both?
+# (b)
 undat %>%
     group_by(oecd, year) %>%
     summarize(medGini = median(gini_reported)) %>%
@@ -261,7 +261,7 @@ undat %>%
         color = "OECD Status"
     )
 
-# (c) is this right?
+# (c)
 undat %>%
     filter(year == 2005, region_un_sub == "Central Asia") %>%
     group_by(country) %>%
@@ -275,7 +275,7 @@ undat %>%
         fill = "Country"
     )
 
-# (d) is this right?
+# (d)
 undat %>%
     filter(year > 1945) %>%
     group_by(region_un, year) %>%
@@ -322,10 +322,9 @@ undat %>%
         y = "Percentage of Income Held by Bottom 25%"
     )
 
-# (h) is this by country?
+# (h)
 undat %>%
     group_by(region_un, incomegroup, country) %>%
-    summarize(avgGini = mean(gini_reported, na.rm = TRUE)) %>%
     ggplot(aes(
         x = factor(incomegroup, levels = c(
             "Low income",
@@ -333,7 +332,7 @@ undat %>%
             "Upper middle income",
             "High income"
         )),
-        y = avgGini
+        y = gini_reported
     )) +
     geom_boxplot() +
     facet_wrap(~region_un) +
