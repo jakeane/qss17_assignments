@@ -8,7 +8,6 @@ library(tidyverse)
 library(skimr)
 
 movie <- read_csv("hw2data/movie_metadata.csv")
-wiid <- read_csv("hw2data/WIID_Dec2018.csv")
 
 # 1. Some Counting, Summarizing, and Filtering Options with your IMDB Movies Data
 
@@ -91,11 +90,12 @@ movie %>%
   summarize(avgRating = mean(imdb_score, na.rm = TRUE)) %>%
   ggplot(aes(title_year, avgRating, color = comdram)) +
   geom_smooth() +
-  geom_point(alpha = 0.4) +
+  geom_point(alpha = 0.2) +
   theme_minimal() +
   theme(legend.position = "bottom") +
-  scale_color_discrete(labels = c("Comedy", "Comedy/Drama", "Drama")) +
-  scale_color_manual(values = color_pallete(3)) +
+  scale_color_manual(
+    values = color_pallete(3),
+    labels = c("Comedy", "Comedy/Drama", "Drama")) +
   labs(
     title = "IMDB Ratings Over Time by Genre",
     x = "Year",
@@ -107,14 +107,25 @@ movie %>%
 # 3. New IMDB Database
 
 # (a)
-imdb <- read_tsv("hw4data/imdb.tsv")
+imdb <- read_tsv(
+  "hw4data/imdb.tsv",
+  # Add \\N to accomodate empty values
+  na = c("", " ", "NA", "N/A", "\\N"),
+  # Reassert as numeric
+  col_types = cols(
+    endYear = col_number()
+  ),
+  # Change quote delimeter to allow quotes in df values
+  quote = ""
+)
 head(imdb)
 ratings <- read_tsv("hw4data/ratings.tsv")
 head(ratings)
 
 # (b)
 imdb %>%
-  count(genres)
+  count(genres) %>%
+  arrange(-n)
 
 # (c)
 new_movies <- full_join(imdb, ratings, by = "tconst")
@@ -134,13 +145,16 @@ new_movies %>%
   ) %>%
   group_by(titleType, startYear) %>%
   summarize(
-    rating25 = quantile(averageRating, .25),
-    rating50 = quantile(averageRating, .5),
-    rating75 = quantile(averageRating, .75)
+    rating25 = quantile(averageRating, .25, na.rm = TRUE),
+    rating50 = quantile(averageRating, .5, na.rm = TRUE),
+    rating75 = quantile(averageRating, .75, na.rm = TRUE)
   ) %>%
   ggplot(aes(x = startYear, color = titleType)) +
   geom_smooth(aes(y = rating50), span = 0.3) +
-  geom_segment(aes(xend = startYear, y = rating25, yend = rating75), alpha = 0.4) +
+  geom_segment(
+    aes(xend = startYear, y = rating25, yend = rating75),
+    alpha = 0.4
+  ) +
   scale_color_manual(
     values = c("#e1ad01", "#0000cd"),
     labels = c("Full-Length", "Short")
