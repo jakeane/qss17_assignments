@@ -18,8 +18,7 @@ library(rgeos)
 city_data <- us_cities(states = c("NH", "VT"))
 state_data <- us_states(states = c("NH", "VT"))
 
-st_point(c(-72.2896, 43.7022))
-
+# Add in Hanover to table
 hanover <- st_sf(
   city = "Hanover",
   state_name = "New Hampshire",
@@ -37,9 +36,9 @@ hanover <- st_sf(
 )
 
 city_whanover <- rbind(city_data, hanover)
+
 state_palette <- colorRampPalette(brewer.pal(3, "Dark2"))
 
-# ADD HANOVER AND COLOR STUFF
 city_whanover %>%
   ggplot() +
   geom_sf(data = state_data, aes(fill = stusps)) +
@@ -78,10 +77,13 @@ geo_europe <- world %>%
 
 total_europe <- st_sf(inner_join(gini_europe, geo_europe))
 
+europe_palette <- colorRampPalette(rev(brewer.pal(9, "Spectral")))
+
 total_europe %>%
   ggplot() +
   geom_sf(size = 0.2, aes(fill = avgGini)) +
   coord_sf(xlim = c(-10, 40), ylim = c(32, 71)) +
+  scale_fill_gradientn(colors = europe_palette(39)) +
   theme_minimal() +
   labs(
     title = "Income Inequality in Europe in the 21st Century",
@@ -89,8 +91,6 @@ total_europe %>%
     x = "Latitude",
     y = "Longitude"
   )
-
-glimpse(world)
   
 
 # 3.
@@ -113,11 +113,11 @@ louisiana_purchase %>%
 # 4.
 trail_of_tears <- st_read("hw8_data/trail_of_tears/trte_nht_100k_line.shp")
 tot_enddate_us <- us_states("1877-12-12")
-state_palette <- colorRampPalette(brewer.pal(8, "Dark2"))
+state_palette <- colorRampPalette(brewer.pal(9, "Pastel1"))
 
 trail_of_tears %>%
   ggplot() +
-  geom_sf(data = tot_enddate_us, aes(fill = id)) +
+  geom_sf(data = tot_enddate_us, aes(fill = id), size = 0.3) +
   geom_sf(color = "#8A0303") +
   coord_sf(xlim = c(-100, -72), ylim = c(27, 44)) +
   scale_fill_manual(values = state_palette(50)) +
