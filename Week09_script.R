@@ -163,7 +163,6 @@ for(i in 1:7) {
   
   scor_off <- rbind(scor_off, curr_so)
 }
-scor_off
 
 inner_join(win_loss, scor_off) %>%
   ggplot(aes(x = PPG, y = Pct)) +
