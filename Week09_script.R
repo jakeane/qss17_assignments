@@ -170,7 +170,7 @@ inner_join(win_loss, scor_off) %>%
   theme_minimal() +
   theme(legend.position = "none") +
   labs(
-    title = "How Scoring Relates to Winning",
+    title = "How Scoring Relates to Winning (NCAA Women's Basketball)",
     x = "Points per Game",
     y = "Winning Percentage"
   )
