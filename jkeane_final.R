@@ -56,9 +56,15 @@ plot_1 <- as_tibble(eo_vector) %>%
   ) +
   transition_reveal(along = year)
 
-
+# "Preview" app does not play gif, just shows frames individually
+# Needs to be opened in Chrome
 anim_save(
   "final_figures/plot_1.png",
+  animate(plot_1, width = 800, height = 400, duration = 20, fps = 20)
+)
+
+anim_save(
+  "final_figures/plot_1.gif",
   animate(plot_1, width = 800, height = 400, duration = 20, fps = 20)
 )
 
@@ -115,18 +121,18 @@ copepods <- read_csv("dv_final_datasets/aus_spatial_dat/copepods_standardised.cs
 
 plot_3 <- australia %>%
   ggplot() +
-  stat_density_2d(
+  stat_density_2d_filled(
     data = copepods,
     aes(
       y = latitude,
       x = longitude,
       alpha = ..level..
     ),
-    fill = "#5597ef",
-    geom="polygon"
+    fill = "#3185ec"
   ) +
+  scale_alpha_manual(values = seq(0, 1, 0.09)) +
   geom_sf(fill = "#065800", color = "#3a8306", size = 0.35) +
-  geom_sf_text(aes(label = adm), color = "#52a01e", size = 3.25) +
+  geom_sf_text(aes(label = adm), color = "#52a01e", size = 3) +
   theme(
     legend.position = "none",
     panel.background = element_rect(fill = "#dadef2"),
@@ -138,7 +144,6 @@ plot_3 <- australia %>%
     title = "Australian Copepods",
     subtitle = "Plankton and Crustacean Concentrations"
   )
-  
 
 ggsave(plot_3, width = 10, height = 5, filename = "final_figures/plot_3.pdf")
 ggsave(plot_3, width = 10, height = 5, filename = "final_figures/plot_3.png")
@@ -155,6 +160,7 @@ ca_counties <- us_counties() %>%
 
 ca_sat <- read_csv("dv_final_datasets/sat_2016/sat_2016.csv")
 
+
 county_scores <- ca_sat %>%
   mutate(
     avgscrmath = as.numeric(avgscrmath),
@@ -167,7 +173,8 @@ county_scores <- ca_sat %>%
     avgRead = mean(avgscrread, na.rm = TRUE)
   )
 
-ca_math <- st_sf(inner_join(county_scores, ca_counties)) %>%
+
+ca_math <- st_sf(right_join(county_scores, ca_counties)) %>%
   ggplot(aes(fill = avgMath)) +
   geom_sf(color = alpha("black", 0.01)) +
   scale_fill_gradient(
@@ -183,7 +190,7 @@ ca_math <- st_sf(inner_join(county_scores, ca_counties)) %>%
     fill = "Score"
   )
 
-ca_read <- st_sf(inner_join(county_scores, ca_counties)) %>%
+ca_read <- st_sf(right_join(county_scores, ca_counties)) %>%
   ggplot(aes(fill = avgRead)) +
   geom_sf(color = alpha("black", 0.01)) +
   scale_fill_gradient(
