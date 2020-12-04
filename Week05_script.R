@@ -9,6 +9,7 @@ library(gridExtra)
 library(grid)
 library(hexbin)
 
+
 # 1. Nightingale
 library(HistData)
 data("Nightingale")

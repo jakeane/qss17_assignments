@@ -55,7 +55,7 @@ have_you <- c(
 have_you
 
 
-image_write_gif(have_you, "hw7gifs/have_you.gif")=
+image_write_gif(have_you, "hw7gifs/have_you.gif")
 
 
 # 2.
